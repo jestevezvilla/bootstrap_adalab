@@ -1,4 +1,6 @@
-*bootstrap_adalab*
+## bootstrap_adalab
 
+```sh
 > npm install
 > gulp
+```
