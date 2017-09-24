@@ -8,7 +8,7 @@ function handleError(err) {
 
 // Compile sass into CSS & auto-inject into browsers
 gulp.task('sass', function() {
-    return gulp.src(['node_modules/bootstrap/scss/bootstrap.scss', 'src/scss/*.scss'])
+    return gulp.src(['src/scss/*.scss'])
         .pipe(sass().on('error', handleError))
         .pipe(gulp.dest("src/css"))
         .pipe(browserSync.stream())
@@ -16,7 +16,7 @@ gulp.task('sass', function() {
 
 // Move the javascript files into our /src/js folder
 gulp.task('js', function() {
-    return gulp.src(['node_modules/bootstrap/dist/js/bootstrap.min.js', 'node_modules/jquery/dist/jquery.min.js', 'node_modules/popper.js/dist/popper.min.js'])
+    return gulp.src(['node_modules/jquery/dist/jquery.min.js', 'node_modules/popper.js/dist/umd/popper.min.js', 'node_modules/bootstrap/dist/js/bootstrap.min.js'])
         .pipe(gulp.dest("src/js"))
         .pipe(browserSync.stream());
 });
@@ -25,11 +25,14 @@ gulp.task('js', function() {
 gulp.task('serve', ['sass'], function() {
 
     browserSync.init({
-        server: "./src"  
+        server: "./compiled"  
     });
+    // browserSync.init({
+    //     server: "./src"  
+    // });
 
-    gulp.watch(['node_modules/bootstrap/scss/bootstrap.scss', 'src/scss/*.scss'], ['sass']);
-    gulp.watch("src/*.html").on('change', browserSync.reload);
+    gulp.watch(['src/scss/*.scss'], ['sass']);
+    gulp.watch(['src/*.html', 'src/css/*', 'compiled/**/*']).on('change', browserSync.reload);
 });
 
 gulp.task('default', ['js','serve']);
